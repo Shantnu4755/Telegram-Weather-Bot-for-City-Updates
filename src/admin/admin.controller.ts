@@ -1,22 +1,18 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { AdminService } from './admin.service';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+
+  @Get('settings')
+  @UseGuards(AuthGuard('google'))
+  getSettings(): string {
+    return 'Admin settings page';
+  }
 
   @Get('users')
-  getUsers() {
-    return this.adminService.getUsers();
-  }
-
-  @Post('block/:id')
-  blockUser(@Param('id') id: string) {
-    return this.adminService.blockUser(id);
-  }
-
-  @Post('settings')
-  updateSettings(@Body() settings: any) {
-    return this.adminService.updateSettings(settings);
+  @UseGuards(AuthGuard('google'))
+  getUsers(): string {
+    return 'Admin users page';
   }
 }

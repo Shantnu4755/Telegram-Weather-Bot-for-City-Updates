@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
-import { BotService } from './bot/bot.service';
+import { AuthService } from './auth/auth.service';
+import { GoogleStrategy } from './auth/google.strategy';
+import { AdminModule } from './admin/admin.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    ScheduleModule.forRoot(),
+    PassportModule.register({ defaultStrategy: 'google' }),
+    AdminModule,
   ],
-  controllers: [AppController, UserController],
-  providers: [UserService, BotService],
+  controllers: [AppController],
+  providers: [AuthService, GoogleStrategy],
 })
 export class AppModule {}
